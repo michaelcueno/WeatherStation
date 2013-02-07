@@ -10,13 +10,18 @@ Item {
     property string temp_f
     property string temp_c
     property string day
-    property string hour
+    property string hour            // Military
     property string wind_mph
     property string pressure_in
-    property string colour
+    property string colour          // Either black or white
+    property string civil           // Pretty time format
+    property string condition
 
     // Other properties
     property int num_hours
+
+    // JSON Object (needed globally to not make repeated calls to the API)
+    property var jsonObject
 
 
     Rectangle { id: shade
@@ -41,12 +46,18 @@ Item {
     }
     Text { id: weekday
         text: day
-        anchors {top: outdoor_temp.bottom; left: parent.left; leftMargin:20; }
-        font.pixelSize: 40
+        anchors {top: outdoor_temp.bottom; horizontalCenter: parent.horizontalCenter }
+        font.pixelSize: 30
+        color: colour
+    }
+    Text { id: condion_text
+        text: condition
+        anchors { top: weekday.bottom; horizontalCenter: parent.horizontalCenter; }
+        font.pixelSize: 30
         color: colour
     }
     Text { id: selected_hour
-        text: hour
+        text: civil
         anchors {top: weekday.top; left: weekday.right; leftMargin: 10; }
         font.pixelSize: 40
         color: colour
@@ -63,27 +74,35 @@ Item {
         doc.onreadystatechange = function(){
             if ( doc.readyState == XMLHttpRequest.DONE)
             {
-                var jsonObject = JSON.parse(doc.responseText);
-                loaded(jsonObject, index)
+                jsonObject = JSON.parse(doc.responseText);
+                setVars(index)
+                num_hours = jsonObject.hourly_forecast.length;
+                mainWindow.cur_time = jsonObject.hourly_forecast[0].FCTTIME.hour
+                completed();
             }
         }
         doc.send();
         console.log(path)
+
     }
 
-    function loaded(jsonObject, index){
+    // Parses the JSON and sets the variables for use in QML
+    // index: The hour to use for hourly, 0=current hour. Goes up to about 34
+    function setVars(index){
         temp_f = jsonObject.hourly_forecast[index].temp.english
         temp_c = jsonObject.hourly_forecast[index].temp.metric
         day = jsonObject.hourly_forecast[index].FCTTIME.weekday_name_abbrev
-        hour = jsonObject.hourly_forecast[index].FCTTIME.civil
+        hour = jsonObject.hourly_forecast[index].FCTTIME.hour
+        civil = jsonObject.hourly_forecast[index].FCTTIME.civil
+        condition = jsonObject.hourly_forecast[index].condition
 
-        num_hours = jsonObject.hourly_forecast.length
-        setColour(jsonObject.hourly_forecast[index].FCTTIME.hour)
+        setHour(jsonObject.hourly_forecast[index].FCTTIME.hour)
 
-        completed()
     }
 
-    function setColour(hour){
+    // Sets the hour that we are currently using
+    function setHour(hour){
+        console.log("setColor: " + hour + " | <- thats the hour in military time")
         if(hour < 7 || hour > 19) { // Night
             colour = "white"
             mainWindow.daytime = 0
@@ -91,5 +110,6 @@ Item {
             colour = "black"
             mainWindow.daytime = 1
         }
+        mainWindow.reDraw()
     }
 }

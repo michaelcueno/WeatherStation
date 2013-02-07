@@ -16,12 +16,10 @@ Rectangle { id: dashboard
 
     SettingsBar {id: settings_bar; x: 0; y:0}
 
-    Rectangle { id: drag_hook // This should be an image!
-        width: parent.width*(1/5); height: mainWindow.height*(1/12)
+    Image { id: drag_hook // This should be an image!
         anchors {bottom: parent.bottom; horizontalCenter: parent.horizontalCenter }
-
-        color: "red"
-
+        source: "../images/dragger.png"
+        rotation: 180;
         MouseArea {
             anchors.fill: parent
             onClicked: dashboard.state = (dashboard.state==="focused")? "" : "focused";

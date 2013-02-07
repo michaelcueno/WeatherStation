@@ -22,9 +22,9 @@ Rectangle {
         ListElement {
             name: "Chicago"
         }
-        ListElement {
+       /* ListElement {
             name: "Los_Angeles"
-        }
+        } */
     }
 
     function addCity(city){
