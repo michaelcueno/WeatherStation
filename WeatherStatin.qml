@@ -4,6 +4,7 @@ import "qml"
 Rectangle {
 
     property int metric: 0               // 0 = farenheit / 1 = celcius
+    property int language: 1             // 1 = English / 2 = Swedish
     property string bg_source: ""        // Source image for background
     property string current_city: ""     // contains the name of the current city
     property int daytime: 0              // 0 = nighttime / 1 = Daytime
@@ -19,8 +20,6 @@ Rectangle {
     Image { id: bg
         source: bg_source
     }
-
-
 
     Text { id: city_name
         text: current_city
@@ -65,21 +64,23 @@ Rectangle {
 
     Swiper {id: swiper; anchors.bottom: parent.bottom; anchors.left: parent.left; }
 
-    Text{ text: swiper.index % 12
-        anchors.top: mainWindow.top
-        font.pixelSize: 50;
-        color: "gray"
+    Text { id: indoor
+        text: (metric == 0)?"Indoor Temp: 72\u00b0f":"Indoor Temp: 22\u00b0c"
+        color: (daytime==0)?"white":"black"
+        font.pixelSize: 25
+        anchors {bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
     }
 
-    Dashboard {id: dash; state: ""}
 
+    Dashboard {id: dash; state: ""}
 
     function init(){
         main_stats.load("Chicago",0)  // Downloads json and sets environment variables
         current_city = "Chicago"
         reDraw()
         // toggle for populated hours when not connected to api
-        // swiper.populate_hours(36, 1)
+        //swiper.populate_hours(240, 1)
+        // TODO: Set current day in swiper
     }
 
     function reDraw(){

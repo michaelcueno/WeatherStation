@@ -16,6 +16,9 @@ Item {
     property string colour          // Either black or white
     property string civil           // Pretty time format
     property string condition
+    property string sky             // Sky condition
+    property string humidity
+    property string pop             // Not sure yet
 
     // Other properties
     property int num_hours
@@ -62,13 +65,32 @@ Item {
         font.pixelSize: 40
         color: colour
     }
+    Text { id: sky_text
+        text: sky
+        anchors {top: selected_hour.bottom; horizontalCenter: parent.horizontalCenter}
+        font.pixelSize: 40
+        color: colour
+    }
+    Text { id: humidity_text
+        text: humidity
+        anchors {top: sky_text.bottom; horizontalCenter: parent.horizontalCenter }
+        font.pixelSize: 40
+        color: colour
+    }
+    Text { id: pop_text
+        text: pop
+        anchors {top: humidity_text.bottom; horizontalCenter: parent.horizontalCenter }
+        font.pixelSize: 40
+        color: colour
+    }
+
 
 
 
 
     function load(name, index) {
 
-        var path = "http://api.wunderground.com/api/9d27ba09f7bb4b6e/hourly/q/CA/"+name+".json"
+        var path = "http://api.wunderground.com/api/9d27ba09f7bb4b6e/hourly10day/q/CA/"+name+".json"
         var doc = new XMLHttpRequest();
         doc.open("GET", path);
         doc.onreadystatechange = function(){
@@ -78,6 +100,7 @@ Item {
                 setVars(index)
                 num_hours = jsonObject.hourly_forecast.length;
                 mainWindow.cur_time = jsonObject.hourly_forecast[0].FCTTIME.hour
+                swiper.static_cur_day = swiper.current_day
                 completed();
             }
         }
@@ -95,9 +118,12 @@ Item {
         hour = jsonObject.hourly_forecast[index].FCTTIME.hour
         civil = jsonObject.hourly_forecast[index].FCTTIME.civil
         condition = jsonObject.hourly_forecast[index].condition
+        sky = jsonObject.hourly_forecast[index].sky
+        humidity = jsonObject.hourly_forecast[index].humidity
+        pop = jsonObject.hourly_forecast[index].pop
+        day = jsonObject.hourly_forecast[index].FCTTIME.weekday_name_abbrev
 
         setHour(jsonObject.hourly_forecast[index].FCTTIME.hour)
-
     }
 
     // Sets the hour that we are currently using
@@ -111,5 +137,14 @@ Item {
             mainWindow.daytime = 1
         }
         mainWindow.reDraw()
+
+        // Take care of setting the day
+        if(day=="Mon") swiper.current_day = 0;
+        if(day=="Tue") swiper.current_day = 1;
+        if(day=="Wed") swiper.current_day = 2;
+        if(day=="Thu") swiper.current_day = 3;
+        if(day=="Fri") swiper.current_day = 4;
+        if(day=="Sat") swiper.current_day = 5;
+        if(day=="Sun") swiper.current_day = 6;
     }
 }

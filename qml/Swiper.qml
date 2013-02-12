@@ -3,20 +3,18 @@ import QtQuick 2.0
 Item {
 
     property int index: hours.currentIndex
+    property int current_day                        // 0=monday, 1=tuesday ...
+    property int static_cur_day                            // Never changes, this is today
 
     width: mainWindow.width
     height: mainWindow.height*(1/4)
 
     Image { id: bg
-        source: "../images/swipe_bg2.png"
+        source: "../images/swipe_bg.png"
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
     ListModel { id: hoursModel }
-
-    Component { id: highlighter
-        Rectangle { width: 80; height: 80; color: "lightsteelblue"; opacity: .5}
-    }
 
     Component { id: pathDelegate;
         Item {
@@ -34,56 +32,121 @@ Item {
     PathView { id: hours
 
         anchors.fill: parent
-        highlight: highlighter
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         model: hoursModel
         delegate: pathDelegate
 
         path: Path { id: path
-            startX: -700; startY: 500
+            startX: -8000; startY: 23100
             PathAttribute { name: "itemRotation"; value: 30 }
-            PathQuad { x: mainWindow.width+760; y: 500; controlX: mainWindow.width/2; controlY: -460}
+            PathQuad { x: mainWindow.width+8000; y: 23100; controlX: mainWindow.width/2; controlY: -23018}
             PathAttribute { name: "itemRotation"; value: 30 }
         }
-
         onCurrentIndexChanged: resetHour(currentIndex)
     }
 
-    Text { id: today
-        text: "Today"
-        font.pixelSize: 25
-        color: "white"
-        anchors { horizontalCenter: parent.horizontalCenter; horizontalCenterOffset: -240 }
-        anchors { verticalCenter: parent.verticalCenter }
+    //--------------------------------- DAY BUTTONS -------------------------------------//
+    Text { id: monday
+        text: (mainWindow.language==1)?"Monday":"Måndag"
+        font.pixelSize: 25;
+        color: (current_day == 0)?"#1afffc":"white"
+        anchors { left: parent.left; leftMargin: 125; bottom: parent.bottom; bottomMargin: 20 }
+        rotation: -17;
         MouseArea {
             anchors.fill: parent
-            onClicked: hours.currentIndex = 0;
-        }
-    }
-    Text { id: tomorrow
-        text: "Tomorrow"
-        font.pixelSize: 25
-        color: "white"
-        anchors { left: today.right; leftMargin: 160 }
-        anchors { verticalCenter: parent.verticalCenter; verticalCenterOffset: -20 }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: { hours.currentIndex = hours.currentIndex + 24
-                console.log("Clicked");
+            onClicked: {
+                set_day(0);
             }
         }
     }
-    Text { id: second_day
-        text: "2daysaway"
-        font.pixelSize: 25
-        color: "white"
-        anchors { left: tomorrow.right; leftMargin: 160 }
-        anchors { verticalCenter: parent.verticalCenter }
+    Text { id: tuesday
+        text: (mainWindow.language==1)?"Tuesday":"Tisdag"
+        font.pixelSize: 25;
+        color: (current_day == 1)?"#1afffc":"white"
+        anchors { left: monday.left; leftMargin: 140; bottom: parent.bottom; bottomMargin: 50 }
+        rotation: -10;
         MouseArea {
             anchors.fill: parent
-            onClicked: hours.currentIndex + 30
+            onClicked: {
+                set_day(1);
+            }
         }
+    }
+    Text { id: wednesday
+        text: (mainWindow.language==1)?"Wednesday":"Onsdag"
+        font.pixelSize: 25;
+        color: (current_day == 2)?"#1afffc":"white"
+        anchors { left: tuesday.left; leftMargin: 140; bottom: parent.bottom; bottomMargin: 68 }
+        rotation: -4;
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                set_day(2);
+            }
+        }
+    }
+    Text { id: thursday
+        text: (mainWindow.language==1)?"Thursday":"Torsdag"
+        font.pixelSize: 25;
+        color: (current_day == 3)?"#1afffc":"white"
+        anchors { left: wednesday.left; leftMargin: 180; bottom: parent.bottom; bottomMargin: 72 }
+        rotation: 1;
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                set_day(3);
+            }
+        }
+    }
+    Text { id: friday
+        text: (mainWindow.language==1)?"Friday":"​​Fredag"
+        font.pixelSize: 25;
+        color: (current_day == 4)?"#1afffc":"white"
+        anchors { left: thursday.left; leftMargin: 150; bottom: parent.bottom; bottomMargin: 65 }
+        rotation: 4.5;
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                set_day(4);
+            }
+        }
+    }
+    Text { id: saturday
+        text: (mainWindow.language==1)?"Saturday":"Lördag"
+        font.pixelSize: 25;
+        color: (current_day == 5)?"#1afffc":"white"
+        anchors { left: friday.left; leftMargin: 110; bottom: parent.bottom; bottomMargin: 49 }
+        rotation: 8.5;
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                set_day(5);
+            }
+        }
+    }
+    Text { id: sunday
+        text: (mainWindow.language==1)?"Sunday":"Söndag"
+        font.pixelSize: 25;
+        color: (current_day == 6)?"#1afffc":"white"
+        anchors { left: saturday.left; leftMargin: 140; bottom: parent.bottom; bottomMargin: 22 }
+        rotation: 15;
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                set_day(6);
+            }
+        }
+    }
+
+    function set_day(day){
+
+        var multiplier = day - static_cur_day
+        if(multiplier<0){
+            multiplier = multiplier + 7;
+        }
+        hours.currentIndex = 24*multiplier;
+        console.log()
     }
 
     function populate_hours(num_hours, cur_hour){
@@ -97,7 +160,7 @@ Item {
 
         if(offset <= 12){
             return offset + ":00\n am";
-        }else if(offset > 12 && offset < 24){
+        }else if(offset > 12 && offset < 25){
             offset = offset - 12;
             return offset + ":00\n pm";
         }else{
@@ -109,5 +172,6 @@ Item {
 
     function resetHour(x){
         main_stats.setVars(x)
+        // needs to update day as well
     }
 }

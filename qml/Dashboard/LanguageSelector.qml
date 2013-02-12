@@ -13,6 +13,7 @@ Item { id: container
         smooth:true;
 
         onComboClicked: {
+            mainWindow.language = selectedItem
             console.log(selectedItem)
         }
 
