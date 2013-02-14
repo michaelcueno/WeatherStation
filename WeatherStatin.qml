@@ -75,7 +75,7 @@ Rectangle {
     Dashboard {id: dash; state: ""}
 
     function init(){
-        main_stats.load("Chicago",0)  // Downloads json and sets environment variables
+        main_stats.load("60607",0)  // Downloads json and sets environment variables
         current_city = "Chicago"
         reDraw()
         // toggle for populated hours when not connected to api

@@ -24,7 +24,6 @@ Item {
                 text: hour
                 font.pixelSize: 25
                 color: "white"
-                rotation: PathView.itemRotationasdf
             }
         }
     }
@@ -146,7 +145,6 @@ Item {
             multiplier = multiplier + 7;
         }
         hours.currentIndex = 24*multiplier;
-        console.log()
     }
 
     function populate_hours(num_hours, cur_hour){
@@ -165,7 +163,7 @@ Item {
             return offset + ":00\n pm";
         }else{
             offset = offset - 24;
-            console.log(offset)
+ //           console.log(offset)  TODO: I dont think this is right ...
             return to_civil_time(offset);
         }
     }
@@ -173,5 +171,10 @@ Item {
     function resetHour(x){
         main_stats.setVars(x)
         // needs to update day as well
+
+    }
+
+    function clear(){
+        hoursModel.clear()
     }
 }

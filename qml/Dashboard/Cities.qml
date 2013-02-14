@@ -10,11 +10,13 @@ Rectangle {
         anchors.fill: parent
     }
 
-    ListView { id: cities
-        width: parent.width; height: parent.height
+    GridView { id: cities
+        anchors { centerIn: parent }
+        width: parent.width-80; height: parent.height - 30
         model: citiesModel
         delegate: CitiesDelegate {}
-
+        cellHeight: 370
+        cellWidth: 280
     }
 
     ListModel {
@@ -22,11 +24,21 @@ Rectangle {
         ListElement {
             name: "Chicago"
         }
-       /* ListElement {
-            name: "Los_Angeles"
-        } */
+        ListElement {
+            name: "Los Angeles"
+        }
+        ListElement {
+            name: "Seattle, WA"
+        }
+        ListElement {
+            name: "Seoul, Korea"
+        }
+        ListElement {
+            name: "Denver, CO"
+        }
     }
 
+    // Called by the settingsBar when user enters a city and taps 'add'
     function addCity(city){
         citiesModel.append( { name: city } )
         cities.currentIndex = cities.count-1

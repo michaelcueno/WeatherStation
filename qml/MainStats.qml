@@ -89,7 +89,8 @@ Item {
 
 
     function load(name, index) {
-
+        // Clear hours model so we don't just append
+        swiper.clear()
         var path = "http://api.wunderground.com/api/9d27ba09f7bb4b6e/hourly10day/q/CA/"+name+".json"
         var doc = new XMLHttpRequest();
         doc.open("GET", path);
