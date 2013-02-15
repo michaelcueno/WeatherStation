@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item { id: container
 
-    Rectangle {
+    Item {
         id:comboBox
         property int selectedItem: 0;
         property alias selectedIndex: listView.currentIndex;
@@ -14,22 +14,22 @@ Item { id: container
 
         onComboClicked: {
             mainWindow.language = selectedItem
-            console.log(selectedItem)
         }
 
         Rectangle {
             id:chosenItem
             width:parent.width;
             height:comboBox.height;
-            color: "lightsteelblue"
+            color: "#0090ff"
             smooth:true;
+            radius: 6
             Text {
                 anchors.centerIn: parent;
                 anchors.margins: 8;
                 id:chosenItemText
                 text: "English"
                 font.family: "Arial"
-                font.pointSize: 14;
+                font.pointSize: 20;
                 smooth:true
             }
 
@@ -62,7 +62,7 @@ Item { id: container
                     Text {
                         text: name
                         anchors.centerIn: parent
-
+                        font.pixelSize: 20
                     }
                     MouseArea {
                         anchors.fill: parent;
@@ -122,23 +122,23 @@ Item { id: container
             number: 5;
         }
         ListElement {
-            name: "English"
+            name: "Spanglish"
             number: 6;
         }
         ListElement {
-            name: "English"
+            name: "Turkish"
             number: 7;
         }
         ListElement {
-            name: "English"
+            name: "Arabic"
             number: 8;
         }
         ListElement {
-            name: "English"
+            name: "Chinese"
             number: 9;
         }
         ListElement {
-            name: "English"
+            name: "Clingon"
             number: 10;
         }
     }

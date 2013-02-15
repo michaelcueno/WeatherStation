@@ -3,17 +3,17 @@
 import QmlProject 1.1
 
 Project {
-    mainFile: "WeatherStatin.qml"
+    mainFile: "WeatherStation.qml"
 
     /* Include .qml, .js, and image files from current directory and subdirectories */
     QmlFiles {
         directory: "."
     }
     JavaScriptFiles {
-        directory: "javascripts"
+        directory: "."
     }
     ImageFiles {
-        directory: "images"
+        directory: "."
     }
     /* List of plugin directories passed to QML runtime */
     // importPaths: [ "../exampleplugin" ]

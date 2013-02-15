@@ -8,7 +8,7 @@ Rectangle {
     property string bg_source: ""        // Source image for background
     property string current_city: ""     // contains the name of the current city
     property int daytime: 0              // 0 = nighttime / 1 = Daytime
-    property int cur_time // Hour 1-24
+    property int cur_time                // Hour 1-24 (constant)
     property int cosmo_constant          // Used for positioning the sun/moon (Based off the cur_time)
 
     Component.onCompleted: init()
@@ -28,14 +28,14 @@ Rectangle {
         color: (daytime==0)? "white":"black"
     }
 
-    // Gonna need a javascript model
+
     MainStats { id: main_stats;
         anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter; verticalCenterOffset: -80 }
         onCompleted: swiper.populate_hours(main_stats.num_hours, cur_time)
     }
 
     Image { id: cosmic_object   // either the sun or the moon
-        source: (daytime==0)?"images/moonunit.png":"images/sun.png"
+        source: (daytime==0)?"images/moon_unit.png":"images/sun.png"
         y: {var time = (swiper.index%12);
             var offset = time-7;
             if(offset==0){return mainWindow.height+500;}
@@ -44,7 +44,7 @@ Rectangle {
             }
             return ((mainWindow.height/11)*offset) - 200
         }
-        x: mainWindow.width * (3/5)
+        x: mainWindow.width * (5/7)
         transitions: Transition {
             PropertyAnimation { properties: "x,y"; easing.type: Easing.Linear }
         }
@@ -75,12 +75,13 @@ Rectangle {
     Dashboard {id: dash; state: ""}
 
     function init(){
-        main_stats.load("60607",0)  // Downloads json and sets environment variables
+        //main_stats.load("60607",0)  // Downloads json and sets environment variables
         current_city = "Chicago"
         reDraw()
         // toggle for populated hours when not connected to api
-        //swiper.populate_hours(240, 1)
+        swiper.populate_hours(240, 1)
         // TODO: Set current day in swiper
+        main_stats.synthData()
     }
 
     function reDraw(){

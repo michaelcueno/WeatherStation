@@ -11,12 +11,14 @@ Rectangle {
     }
 
     GridView { id: cities
-        anchors { centerIn: parent }
-        width: parent.width-80; height: parent.height - 30
+        anchors { leftMargin: 40; topMargin:40; left: parent.left; top: parent.top }
+        width: parent.width; height: parent.height -40
         model: citiesModel
         delegate: CitiesDelegate {}
         cellHeight: 370
-        cellWidth: 280
+        cellWidth: 295
+        clip: true
+
     }
 
     ListModel {

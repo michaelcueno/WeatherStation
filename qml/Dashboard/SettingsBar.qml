@@ -1,92 +1,44 @@
 import QtQuick 2.0
 import "../"
 
-Rectangle { id: container
+Item { id: container
     width: mainWindow.width
     height: mainWindow.height *(1/13);
-    color: "grey"
-
-    Text { id: language_title
-        anchors { left: container.left; leftMargin: container.width/20; verticalCenter: container.verticalCenter }
-        text: qsTr("Language")
-        font.pixelSize: 20;
+    Image { id: bg
+        source: "../../images/settings_bg.png"
     }
 
+
     LanguageSelector {id: lang_selector
-        anchors { left: language_title.right; leftMargin: 20; verticalCenter: container.verticalCenter; }
+        anchors { left: parent.left; leftMargin: 120; verticalCenter: container.verticalCenter}
         anchors.verticalCenterOffset: -15;
         width: 120;
     }
 
-    Text { id: metric_title
-        anchors { horizontalCenter: container.horizontalCenter; verticalCenter: container.verticalCenter }
-        anchors.horizontalCenterOffset: -50;
-        text: "Metric"
-        font.pixelSize: 20
-    }
-
-    Item { id: metric_selector
-        anchors { horizontalCenter: container.horizontalCenter; verticalCenter: container.verticalCenter }
-        anchors.verticalCenterOffset: -15;
-        anchors.horizontalCenterOffset: 50;
-
-        Rectangle { id: celcius
-            width: 30; height: 30
-            anchors {left: metric_selector.left}
-            radius: 7
-            smooth: true
-            Text {
-                anchors.centerIn: parent
-                text: "C"
-                font.pixelSize: 20;
+    Image { id: metric_selector
+        source: "../../images/metric_f.png"
+        anchors.centerIn: parent
+        MouseArea {
+            anchors {left: parent.left; right: parent.horizontalCenter; top:parent.top; bottom:parent.bottom}
+            onClicked: {
+                metric_selector.source = "../../images/metric_f.png"
+                mainWindow.metric = 0
             }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    current.state = "c"
-                    mainWindow.metric = 1
-                }
-            }
-
         }
-
-        Rectangle { id: farenheit
-            width: 30; height: 30
-            anchors {right: celcius.left; rightMargin: 15; }
-            radius: 7
-            Text {
-                anchors.centerIn: parent
-                text: "F"
-                font.pixelSize: 20;
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    current.state = ""
-                    mainWindow.metric = 0
-                }
+        MouseArea {
+            anchors {left: parent.horizontalCenter; right: parent.right;  top:parent.top; bottom:parent.bottom}
+            onClicked: {
+                metric_selector.source = "../../images/metric_c.png"
+                mainWindow.metric = 1
             }
         }
 
-        Rectangle { id: current
-            width: 36; height: 36
-            opacity: .6
-            anchors.centerIn: farenheit
-            color: "steelblue"
-            radius: 7
-
-            states: State { name: "c"
-                PropertyChanges { target: current; anchors.centerIn: celcius }
-            }
-
-            transitions: Transition { AnchorAnimation {duration: 10}}
-        }
     }
 
     Text { id: new_city_title
         anchors { right: new_city.left; rightMargin: 20; verticalCenter: container.verticalCenter }
         text: "New City"
-        font.pixelSize: 20
+        font.pixelSize: 25
     }
 
     SearchBox { id: new_city
@@ -96,8 +48,10 @@ Rectangle { id: container
 
     Rectangle { id: submit
         anchors { left: new_city.right; leftMargin: 15; verticalCenter: container.verticalCenter }
-        width: 30
-        height: 20
+        width: 40
+        height: 30
+        radius: 8
+        color: "#00ff18"
         Text {
             anchors.centerIn: parent
             text: "Add"
