@@ -129,7 +129,7 @@ Item {
 
     // Sets the hour that we are currently using
     function setHour(hour){
-        console.log("setColor: " + hour + " | <- thats the hour in military time")
+        //console.log("setColor: " + hour + " | <- thats the hour in military time")
         if(hour < 7 || hour > 19) { // Night
             colour = "white"
             mainWindow.daytime = 0

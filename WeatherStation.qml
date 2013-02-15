@@ -1,3 +1,14 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Michael Cueno.
+** Contact: mcueno2@uic.edu
+**
+** This is the main QML file for the WeatherStation application developed for
+** User Interface Design (CS422) @ UIC
+**
+**
+****************************************************************************/
+
 import QtQuick 2.0
 import "qml"
 
@@ -17,6 +28,7 @@ Rectangle {
     width: 1200
     height: 800
 
+    // Changes based on day or night. TODO: Make different backgrounds for each condition
     Image { id: bg
         source: bg_source
     }
@@ -28,7 +40,7 @@ Rectangle {
         color: (daytime==0)? "white":"black"
     }
 
-
+    // Includes Temp, day, condition.. etc. Center of the screen in the main view
     MainStats { id: main_stats;
         anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter; verticalCenterOffset: -80 }
         onCompleted: swiper.populate_hours(main_stats.num_hours, cur_time)
@@ -50,7 +62,8 @@ Rectangle {
         }
     }
 
-    Image { id: drag_hook // This should be an image!
+    // Settings/Dashboard accessor
+    Image { id: drag_hook
         anchors {top: parent.top; horizontalCenter: parent.horizontalCenter }
         anchors.bottomMargin: drag_hook.height/2
         source: "images/dragger.png"
@@ -62,6 +75,7 @@ Rectangle {
         }
     }
 
+    // Hourly swiper that changes the hourly stats in mainStats
     Swiper {id: swiper; anchors.bottom: parent.bottom; anchors.left: parent.left; }
 
     Text { id: indoor
@@ -72,16 +86,16 @@ Rectangle {
     }
 
 
+    // Settings and cities view (this is where the user can change the city to focus on)
     Dashboard {id: dash; state: ""}
 
     function init(){
-        //main_stats.load("60607",0)  // Downloads json and sets environment variables
+        main_stats.load("60607",0)  // Downloads json and sets environment variables
         current_city = "Chicago"
         reDraw()
-        // toggle for populated hours when not connected to api
-        swiper.populate_hours(240, 1)
-        // TODO: Set current day in swiper
-        main_stats.synthData()
+        // Uncomment for populated hours and data when not connected to api
+        // swiper.populate_hours(240, 1)
+        // main_stats.synthData()
     }
 
     function reDraw(){

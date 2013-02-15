@@ -138,6 +138,7 @@ Item {
         }
     }
 
+    // Used for placement of the cosmic unit
     function set_day(day){
 
         var multiplier = day - static_cur_day
@@ -147,6 +148,7 @@ Item {
         hours.currentIndex = 24*multiplier;
     }
 
+    // Loads the hours into the swiper after downloading hourly data set
     function populate_hours(num_hours, cur_hour){
 
         for( var i=0; i<num_hours; i++ ){
@@ -154,6 +156,7 @@ Item {
         }
     }
 
+    // Used to convert index (0-240) in the hours data to a readable time
     function to_civil_time(offset){
 
         if(offset <= 12){
@@ -163,14 +166,13 @@ Item {
             return offset + ":00\n pm";
         }else{
             offset = offset - 24;
- //           console.log(offset)  TODO: I dont think this is right ...
             return to_civil_time(offset);
         }
     }
 
+    // Update main stats
     function resetHour(x){
         main_stats.setVars(x)
-        // needs to update day as well
 
     }
 
