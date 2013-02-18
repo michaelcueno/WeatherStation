@@ -11,6 +11,7 @@
 
 import QtQuick 2.0
 import "qml"
+import "javascripts/Tr.js" as Tr
 
 Rectangle {
 
@@ -96,6 +97,7 @@ Rectangle {
         // Uncomment for populated hours and data when not connected to api
         // swiper.populate_hours(240, 1)
         // main_stats.synthData()
+        //Tr.tr("This is a test string", "English", "Spanish")
     }
 
     function reDraw(){

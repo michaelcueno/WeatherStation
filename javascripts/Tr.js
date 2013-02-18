@@ -1,21 +1,27 @@
-function Tr(text) {
-    
-    var path = "http://api.wunderground.com/api/9d27ba09f7bb4b6e/hourly10day/q/CA/"+name+".json"
-    var doc = new XMLHttpRequest();
-    doc.setRequestHeader("Client", "");
-    doc.open("GET", path);
-    doc.onreadystatechange = function(){
-        if ( doc.readyState == XMLHttpRequest.DONE)
-        {
-            jsonObject = JSON.parse(doc.responseText);
-            setVars(index)
-            num_hours = jsonObject.hourly_forecast.length;
-            mainWindow.cur_time = jsonObject.hourly_forecast[0].FCTTIME.hour
-            swiper.static_cur_day = swiper.current_day
-            completed();mainWindow.cur_time = hour
-            mainWindow.reDraw()
+
+function tr(textToTranslate, fromLanguage, toLanguage) {
+    var p = {};
+    p.appid = 'DvqR/Yg/3Re8SnBwzCEXe7+JH61EzhkcVA+nwrjXBHo=';
+    p.to = toLanguage;
+    p.from = fromLanguage;
+    p.text = textToTranslate;
+    $.ajax({
+        url: 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate',
+        data: p,
+        dataType: 'jsonp',
+        jsonp: 'oncomplete',
+        jsonpCallback: 'ajaxTranslateCallback',
+        complete: function(request, status) {
+            alert('complete: '+status);
+        },
+        success: function(data, status) {
+            alert('success: data-'+data+',status-'+status);
+        },
+        error: function(request, status, error) {
+            alert('error: status-'+status+',desc-'+error);
         }
-    }
-    doc.send();
-    console.log(path)
+    });
+}
+function ajaxTranslateCallback(response) {
+    console.log(response);
 }
