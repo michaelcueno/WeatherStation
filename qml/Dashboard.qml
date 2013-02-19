@@ -4,7 +4,7 @@ import "Dashboard"
 Rectangle { id: dashboard
 
     width: mainWindow.width
-    height: mainWindow.heigh
+    height: mainWindow.height
 
     y: -mainWindow.height
 
